@@ -22,7 +22,7 @@ const Message = ({date, content}) => {
   return (
       <div className={classes.root}>
         <div className={classes.date}>
-          {moment(date).format('DD/MM/YYYY hh:mm')}
+          {moment(date).format('DD/MM/YYYY HH:mm')}
         </div>
         <div className={classes.content}>
           {content}

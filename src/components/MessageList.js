@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Message from './Message';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -59,15 +61,27 @@ const fakeMessageList = [
     },
 ];
 
-const MessageList = () => {
+const MessageList = ({messages}) => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      {fakeMessageList.map((message)=>{
+      {messages.map((message)=>{
         return <Message key={message.date} date={message.date} content={message.content} />;
       })}
     </div>
   );
-}
+};
 
-export default MessageList;
+MessageList.propTypes = {
+  messages: PropTypes.array,
+};
+
+MessageList.defaultProps = {
+  messages: [],
+};
+
+const mapStateToProps = state => ({
+  messages: state.messages,
+});
+
+export default connect(mapStateToProps)(MessageList);
