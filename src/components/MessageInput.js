@@ -27,11 +27,12 @@ const MessageInput = ({addMessage}) => {
   const handleSubmit = (event)=>{
     event.preventDefault();
     addMessage(value);
+    setValue('');
   }
 
   return (
       <form onSubmit={handleSubmit} className={classes.root}>
-        <TextField label="Type a message" onChange={e => setValue(e.target.value)}  className={classes.input} />
+        <TextField value={value} label="Type a message" onChange={e => setValue(e.target.value)}  className={classes.input} />
         <Button variant="outlined" type="submit">SEND</Button>
       </form>
   )
