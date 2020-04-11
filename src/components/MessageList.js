@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Message from './Message';
@@ -10,10 +10,22 @@ const useStyles = makeStyles({
   },
 });
 
+
 const MessageList = ({fetchMessages, messages}) => {
-  useEffect(() => {
-    fetchMessages();
-  }, []);
+  const [loading, setLoading] = useState(false);
+  const [bottomReached, setBottomReached] = useState(false);
+
+  const handleScroll = (e) => {
+    if (e.target.scrollTop===0) {
+      setLoading(true);
+    }
+    if (e.target.scrollHeight - e.target.scrollTop >= e.target.clientHeight - 1 && e.target.scrollHeight - e.target.scrollTop <= e.target.clientHeight + 1) {
+      setBottomReached(true);
+    }
+    else {
+      setBottomReached(false);        
+    }
+  }
 
   const messagesEndRef = useRef(null);
 
@@ -21,11 +33,30 @@ const MessageList = ({fetchMessages, messages}) => {
     messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
   }
 
-  useEffect(scrollToBottom, [messages]);
+  useEffect(() => {
+      const initializeData = async () => {
+        await fetchMessages();
+        scrollToBottom();
+      }
+      initializeData();
+  }, []);
+
+  useEffect(() => {
+    if (bottomReached) {
+      scrollToBottom();
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    if (loading) {
+      fetchMessages();
+      setLoading(false);    
+    }
+  }, [loading]);
 
   const classes = useStyles();
   return (
-    <div className={classes.root}>
+    <div className={classes.root} onScroll={handleScroll}>
       {messages.map((message)=>{
         return <Message key={message.date} date={message.date} content={message.content} />;
       })}
@@ -49,7 +80,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchMessages: () => {dispatch({type: "SAGA/FETCH_MESSAGES", page: 0, perPage: 15})}
+  fetchMessages: () => {
+    dispatch({type: "SAGA/FETCH_MESSAGES"});
+  }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessageList);

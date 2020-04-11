@@ -5,7 +5,7 @@ const messages = (state = [], action) => {
         ...state,
         ...action.messages,
       ]
-          case 'ADD_OLD_MESSAGES':
+    case 'ADD_OLD_MESSAGES':
       return [
         ...action.messages,
         ...state
