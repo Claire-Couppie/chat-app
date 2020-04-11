@@ -1,16 +1,18 @@
 const messages = (state = [], action) => {
   switch (action.type) {
-    case 'ADD_MESSAGE':
+    case 'ADD_NEW_MESSAGES':
       return [
         ...state,
-        {
-          date: action.date,
-          content: action.content,
-        }
+        ...action.messages,
+      ]
+          case 'ADD_OLD_MESSAGES':
+      return [
+        ...action.messages,
+        ...state
       ]
     default:
-      return state
+      return state;
   }
 }
 
-export default messages
+export default messages;

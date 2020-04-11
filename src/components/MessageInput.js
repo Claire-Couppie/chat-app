@@ -5,7 +5,7 @@ import moment from 'moment';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import { addMessage } from '../actions';
+import { addNewMessages } from '../actions';
 
 const useStyles = makeStyles({
   root: {
@@ -47,7 +47,7 @@ MessageInput.defaultProps = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  addMessage: content => dispatch(addMessage({date: moment().format('YYYY-MM-DD HH:mm:ss.SSS'), content}))
+  addMessage: content => dispatch(addNewMessages([{date: moment().format('YYYY-MM-DD HH:mm:ss.SSS'), content}]))
 })
 
 export default connect(null, mapDispatchToProps)(MessageInput);

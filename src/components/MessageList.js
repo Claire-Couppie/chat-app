@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Message from './Message';
@@ -10,58 +10,11 @@ const useStyles = makeStyles({
   },
 });
 
-const fakeMessageList = [
-    {
-        date: '2020-04-04T10:35:24-08:00',
-        content: 'Hello world',
-    },
-    {
-        date: '2020-04-04T11:35:24-08:00',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    },
-    {
-        date: '2020-04-04T11:35:24-08:00',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    },
-    {
-        date: '2020-04-04T11:35:24-08:00',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    },
-    {
-        date: '2020-04-04T11:35:24-08:00',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    },
-    {
-        date: '2020-04-04T11:35:24-08:00',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    },
-    {
-        date: '2020-04-04T11:35:24-08:00',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    },
-    {
-        date: '2020-04-05T10:35:24-08:00',
-        content: 'Hello world',
-    },
-    {
-        date: '2020-04-06T10:35:24-08:00',
-        content: 'Hello world',
-    },
-    {
-        date: '2020-04-07T10:35:24-08:00',
-        content: 'Hello world',
-    },
-    {
-        date: '2020-04-08T10:35:24-08:00',
-        content: 'Hello world',
-    },
-    {
-        date: '2020-04-09T10:35:24-08:00',
-        content: 'Hello world',
-    },
-];
+const MessageList = ({fetchMessages, messages}) => {
+  useEffect(() => {
+    fetchMessages();
+  }, []);
 
-const MessageList = ({messages}) => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -73,10 +26,12 @@ const MessageList = ({messages}) => {
 };
 
 MessageList.propTypes = {
+  fetchMessages: PropTypes.func,
   messages: PropTypes.array,
 };
 
 MessageList.defaultProps = {
+  fetchMessages: () => {},
   messages: [],
 };
 
@@ -84,4 +39,8 @@ const mapStateToProps = state => ({
   messages: state.messages,
 });
 
-export default connect(mapStateToProps)(MessageList);
+const mapDispatchToProps = dispatch => ({
+  fetchMessages: () => {dispatch({type: "SAGA/FETCH_MESSAGES", page: 0, perPage: 5})}
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(MessageList);
