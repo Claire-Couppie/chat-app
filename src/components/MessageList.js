@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Message from './Message';
@@ -15,12 +15,21 @@ const MessageList = ({fetchMessages, messages}) => {
     fetchMessages();
   }, []);
 
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+  }
+
+  useEffect(scrollToBottom, [messages]);
+
   const classes = useStyles();
   return (
     <div className={classes.root}>
       {messages.map((message)=>{
         return <Message key={message.date} date={message.date} content={message.content} />;
       })}
+      <div ref={messagesEndRef} />
     </div>
   );
 };
@@ -40,7 +49,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchMessages: () => {dispatch({type: "SAGA/FETCH_MESSAGES", page: 0, perPage: 5})}
+  fetchMessages: () => {dispatch({type: "SAGA/FETCH_MESSAGES", page: 0, perPage: 15})}
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessageList);
