@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import rootReducer from './reducers';
 import rootSaga from './sagas';
 import MessageInput from './components/MessageInput';
-import MessageList from './components/MessageList';
+import MessageListContainer from './components/MessageListContainer';
 
 const sagaMiddleware = createSagaMiddleware()
 const store = createStore(rootReducer,  applyMiddleware(sagaMiddleware));
@@ -29,7 +29,7 @@ function App() {
   return (
     <Provider store={store}>
       <div className={classes.root}>
-        <MessageList />
+        <MessageListContainer />
         <MessageInput />
       </div>
     </Provider>

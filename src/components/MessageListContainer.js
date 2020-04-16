@@ -11,7 +11,7 @@ const useStyles = makeStyles({
 });
 
 
-const MessageList = ({fetchMessages, messages}) => {
+const MessageListContainer = ({fetchMessages, messages}) => {
   const [loading, setLoading] = useState(false);
   const [bottomReached, setBottomReached] = useState(false);
 
@@ -65,12 +65,12 @@ const MessageList = ({fetchMessages, messages}) => {
   );
 };
 
-MessageList.propTypes = {
+MessageListContainer.propTypes = {
   fetchMessages: PropTypes.func,
   messages: PropTypes.array,
 };
 
-MessageList.defaultProps = {
+MessageListContainer.defaultProps = {
   fetchMessages: () => {},
   messages: [],
 };
@@ -85,4 +85,4 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(MessageList);
+export default connect(mapStateToProps, mapDispatchToProps)(MessageListContainer);
