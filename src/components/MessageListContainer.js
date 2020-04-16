@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Message from './Message';
+import MessageList from './MessageList';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
@@ -10,12 +10,14 @@ const useStyles = makeStyles({
   },
 });
 
-
 const MessageListContainer = ({fetchMessages, messages}) => {
   const [loading, setLoading] = useState(false);
   const [bottomReached, setBottomReached] = useState(false);
+  const [scrollTop, setScrollTop] = useState(0);
 
   const handleScroll = (e) => {
+    setScrollTop(e.target.scrollTop);
+
     if (e.target.scrollTop===0) {
       setLoading(true);
     }
@@ -57,9 +59,7 @@ const MessageListContainer = ({fetchMessages, messages}) => {
   const classes = useStyles();
   return (
     <div className={classes.root} onScroll={handleScroll}>
-      {messages.map((message)=>{
-        return <Message key={message.date} date={message.date} content={message.content} />;
-      })}
+      <MessageList messages={messages} scrollTop={scrollTop} />
       <div ref={messagesEndRef} />
     </div>
   );

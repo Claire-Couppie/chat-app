@@ -13,6 +13,7 @@ const useStyles = makeStyles({
   },
   content: {
     margin: 4,
+    fontSize: 16,
   },
 });
 
